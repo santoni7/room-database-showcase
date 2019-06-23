@@ -13,30 +13,39 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity {
 
     private List<Person> personList = new ArrayList<>();
+    private AppDatabase appDatabase;
+    private PersonDAO personDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ButterKnife.bind(this);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+
+        appDatabase = AppDatabaseProvider.getInstance(this);
+        personDAO = appDatabase.personDAO();
     }
 
     @OnClick(R.id.bt_add)
     void add() {
+        personDAO.insert(new Person("vasya" , "vasya_pupkin@in.ua"));
     }
 
     @OnClick(R.id.bt_delete)
     void delete() {
+        personList = personDAO.getAll();
         if (personList.size() > 0) {
-            personList.remove(personList.size()-1);
+            Person personToDelete = personList.get(personList.size()-1);
+            personDAO.delete(personToDelete);
         }
     }
 
     @OnClick(R.id.bt_get_all)
     void getAll() {
+        personList = personDAO.getAll();
         for (Person p :
                 personList) {
-            Log.d("danil",p.toString());
+            Log.d("mLog", p.toString());
         }
     }
 }

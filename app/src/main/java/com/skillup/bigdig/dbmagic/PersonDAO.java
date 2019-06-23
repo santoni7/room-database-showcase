@@ -14,7 +14,10 @@ public interface PersonDAO {
     List<Person> getAll();
 
     @Query("SELECT * FROM person WHERE id = :id")
-    Person getById(long id);
+    Person getById(int id);
+
+    @Query("DELETE FROM person WHERE id = :id")
+    void deleteById(int id);
 
     @Insert
     void insert(Person employee);
